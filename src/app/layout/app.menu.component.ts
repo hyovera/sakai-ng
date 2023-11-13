@@ -21,6 +21,25 @@ export class AppMenuComponent implements OnInit {
                 ]
             },
             {
+                label: 'Agenda',
+                items: [
+                    { label: 'Agenda', icon: 'pi pi-fw pi-bookmark', routerLink: ['/pages/agenda'] }
+                ]
+            },
+            {
+                label: 'CheckList',
+                items: [
+                    { label: 'CheckList', icon: 'pi pi-fw pi-bookmark', routerLink: ['/pages/checklist'] }
+                ]
+            },
+           /*  {
+                label: 'Prime Blocks',
+                items: [
+                    { label: 'Free Blocks', icon: 'pi pi-fw pi-eye', routerLink: ['/blocks'], badge: 'NEW' },
+                    { label: 'All Blocks', icon: 'pi pi-fw pi-globe', url: ['https://www.primefaces.org/primeblocks-ng'], target: '_blank' },
+                ]
+            } */
+          /*   {
                 label: 'UI Components',
                 items: [
                     { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
@@ -40,22 +59,22 @@ export class AppMenuComponent implements OnInit {
                     { label: 'Chart', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/uikit/charts'] },
                     { label: 'Misc', icon: 'pi pi-fw pi-circle', routerLink: ['/uikit/misc'] }
                 ]
-            },
-            {
+            }, */
+          /*   {
                 label: 'Prime Blocks',
                 items: [
                     { label: 'Free Blocks', icon: 'pi pi-fw pi-eye', routerLink: ['/blocks'], badge: 'NEW' },
                     { label: 'All Blocks', icon: 'pi pi-fw pi-globe', url: ['https://www.primefaces.org/primeblocks-ng'], target: '_blank' },
                 ]
-            },
-            {
+            }, */
+           /*  {
                 label: 'Utilities',
                 items: [
                     { label: 'PrimeIcons', icon: 'pi pi-fw pi-prime', routerLink: ['/utilities/icons'] },
                     { label: 'PrimeFlex', icon: 'pi pi-fw pi-desktop', url: ['https://www.primefaces.org/primeflex/'], target: '_blank' },
                 ]
-            },
-            {
+            }, */
+          /*   {
                 label: 'Pages',
                 icon: 'pi pi-fw pi-briefcase',
                 items: [
@@ -106,8 +125,8 @@ export class AppMenuComponent implements OnInit {
                         routerLink: ['/pages/empty']
                     },
                 ]
-            },
-            {
+            }, */
+        /*     {
                 label: 'Hierarchy',
                 items: [
                     {
@@ -148,8 +167,8 @@ export class AppMenuComponent implements OnInit {
                         ]
                     }
                 ]
-            },
-            {
+            }, */
+           /*  {
                 label: 'Get Started',
                 items: [
                     {
@@ -159,7 +178,7 @@ export class AppMenuComponent implements OnInit {
                         label: 'View Source', icon: 'pi pi-fw pi-search', url: ['https://github.com/primefaces/sakai-ng'], target: '_blank'
                     }
                 ]
-            }
+            } */
         ];
     }
 }

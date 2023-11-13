@@ -1,0 +1,281 @@
+<div class="grid">
+    <div class="col-12">
+       
+    <p-toast></p-toast> 
+        <div class="card">
+           
+            <!-- <h4>Empty Page</h4> -->
+            <p-tabView [activeIndex]="tabactivo">
+                <p-tabPanel header="Pre Agenda">
+                    <p-toolbar styleClass="mb-4">
+                        <ng-template pTemplate="left">
+                            <div class="my-2">
+                                <button pButton pRipple label="Agregar" icon="pi pi-plus" class="p-button-success mr-2"  (click)="abrirPreAgenda()" ></button>
+                            </div>
+                        </ng-template>
+                    </p-toolbar>
+
+               
+                        <p-progressSpinner *ngIf="showSpinner"></p-progressSpinner>
+                
+                    <p-table #dt [value]="preagenda" [columns]="cols" responsiveLayout="scroll" 
+                    [rows]="10" 
+                    [paginator]="true"
+                     [rowsPerPageOptions]="[10,20,30]" 
+                  
+                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
+                     [(selection)]="selectedPreAgenda"
+                      selectionMode="multiple"    [rowHover]="true" dataKey="id_agenda">
+                        
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="width: 3rem">
+                                    <p-tableHeaderCheckbox   [checked]="selectedPreAgenda.length === preagenda.length"    (change)="toggleCouponSelection(preagenda)"></p-tableHeaderCheckbox>
+                                </th>
+                                <th pSortableColumn="id_agenda">id <p-sortIcon field="id_agenda"></p-sortIcon></th>
+                                <th pSortableColumn="cod_agenda">Codigo Agenda <p-sortIcon field="cod_agenda"></p-sortIcon></th>
+                                <th>Dcoumento</th>
+                                <th pSortableColumn="nombre_cliente">Nombre <p-sortIcon field="nombre_cliente"></p-sortIcon></th>
+                                <th pSortableColumn="num_documento">N° documento <p-sortIcon field="num_documento"></p-sortIcon></th>
+                                <th pSortableColumn="descripcion_agenda">Descripcion <p-sortIcon field="descripcion_agenda"></p-sortIcon></th>
+                                <th pSortableColumn="inventoryStatus">Estado <p-sortIcon field="inventoryStatus"></p-sortIcon></th>
+                                <th> Fecha Creacion</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-preagenda>
+                            <tr>
+                                <td>
+                                    <p-tableCheckbox *ngIf="preagenda.id_estado === 1" [value]="preagenda"></p-tableCheckbox>
+                                </td>
+                                <td style="width:14%; min-width:10rem;"><span class="p-column-title">id</span>
+                                    {{preagenda.id_agenda }}
+                                </td>
+                                <td style="width:14%; min-width:10rem;">
+                                    <span class="p-column-title">Codigo Agenda</span>
+                                    {{preagenda.cod_agenda}}
+                                </td>
+                                <td style="width:14%; min-width:10rem;"><span class="p-column-title">N°Doc</span>
+                                    {{preagenda.cod_documento}}
+                                </td>
+                                <td style="width:14%; min-width:8rem;">
+                                  
+                                    {{preagenda.nombre_cliente }}
+                                </td>
+                                <td style="width:14%; min-width:10rem;">
+                                    
+                                    {{preagenda.num_documento}}
+                                </td>
+                                <td style="width:14%; min-width: 10rem;">
+                                   <!--  <p-rating [ngModel]="product.rating" [readonly]="true" [cancel]="false"></p-rating> -->
+                                   {{preagenda.descripcion_agenda}}
+                                </td>
+                                <td style="width:14%; min-width: 10rem;">
+                                    {{preagenda.descripcion_estado}}
+                                 
+                                </td>
+                                <td>
+                                  {{preagenda.id_estado}}
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-tabPanel>
+                <p-tabPanel header="Asignar Agenda">
+                    <form>
+                     <div class="col-12 md:col-6">
+                        <div class="card">
+                            <h5>Seleccionado pre agenda</h5>
+                            <div class="row">
+                                <div class="col">
+
+                                  <ul>
+                                    <li *ngFor="let coupon of selectedPreAgenda">{{ coupon.num_documento }}</li>
+                                  </ul>
+                                    
+                                </div>
+                            </div>
+            
+                        </div>
+                
+                            <div class="formgroup-inline">
+                                <div class="field">
+                                    <label htmlFor="firstname1" class="p-sr-only">Fecha Asignacion</label>
+                                    <p-calendar [showIcon]="true" inputId="icon" (onSelect)="seleccionarFecha($event)" [minDate]="fechaActual" ></p-calendar>
+                                </div>
+                                <div class="field">
+                                    <label htmlFor="lastname1" class="p-sr-only">Tecnico</label>
+                                   <!--  <p-dropdown [options]="selectedTecnicos" optionLabel="name" [(ngModel)]="selectedState"  [ngModelOptions]="{standalone: true}"></p-dropdown> -->
+                               
+                                     <p-autoComplete [(ngModel)]="selectedTecnicosAsignado" [suggestions]="filteredtecnico" (completeMethod)="searchTecnicos($event)"  field="nombre" [dropdown]="true" [ngModelOptions]="{standalone: true}">
+                                    </p-autoComplete>
+                                </div>
+                                
+                            </div>
+
+
+                            <button pButton pRipple type="button" label="Guardar" (click)="registrarAsignacion()" ></button>
+                          
+
+                    </div> 
+                </form>
+                </p-tabPanel>
+                <p-tabPanel header="Estado Agenda">
+
+                    <div class="grid formgrid">
+                        <div class="col-12 mb-2 lg:col-4 lg:mb-0">
+                            <p-autoComplete [(ngModel)]="selectedTecnicos" [suggestions]="filteredtecnico" (completeMethod)="searchTecnicos($event)"  field="nombre" [dropdown]="true">
+                            </p-autoComplete>
+                        </div>
+                        <div class="col-12 mb-2 lg:col-4 lg:mb-0">
+                            <p-dropdown [options]="dropdownItems" optionLabel="name" [(ngModel)]="selectedState"></p-dropdown>
+                        </div>
+                        <div class="col-12 mb-2 lg:col-4 lg:mb-0">
+                            <p-button label="Buscar" icon="pi pi-search" [loading]="loading[0]" (onClick)="load(0)"></p-button>
+                        </div>
+                    </div>
+                    <br>
+
+
+                    <p-table #dt [value]="agenda" [columns]="cols1" responsiveLayout="scroll" 
+                    [rows]="10" 
+                    [paginator]="true"
+                     [rowsPerPageOptions]="[10,20,30]" 
+                     [showCurrentPageReport]="true" 
+                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
+                    
+                         [rowHover]="true" dataKey="id_agenda">
+                        
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="width: 3rem">
+                                   
+                                </th>
+                                <th pSortableColumn="id_agenda">id <p-sortIcon field="id_agenda"></p-sortIcon></th>
+                                <th pSortableColumn="cod_agenda">Codigo Agenda <p-sortIcon field="cod_agenda"></p-sortIcon></th>
+                                <th>Dcoumento</th>
+                                <th pSortableColumn="nombre_cliente">Nombre <p-sortIcon field="nombre_cliente"></p-sortIcon></th>
+                                <th pSortableColumn="num_documento">N° documento <p-sortIcon field="num_documento"></p-sortIcon></th>
+                                <th pSortableColumn="descripcion_agenda">Descripcion <p-sortIcon field="descripcion_agenda"></p-sortIcon></th>
+                                <th pSortableColumn="inventoryStatus">Estado <p-sortIcon field="inventoryStatus"></p-sortIcon></th>
+                                <th> Fecha Creacion</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-agenda>
+                            <tr>
+                                <td>
+                                  
+                                </td>
+                                <td style="width:14%; min-width:10rem;"><span class="p-column-title">id</span>
+                                    {{agenda.id_agenda }}
+                                </td>
+                                <td style="width:14%; min-width:10rem;">
+                                    <span class="p-column-title">Codigo Agenda</span>
+                                    {{agenda.cod_agenda}}
+                                </td>
+                                <td style="width:14%; min-width:10rem;"><span class="p-column-title">N°Doc</span>
+                                    {{agenda.id_cliente}}
+                                </td>
+                                <td style="width:14%; min-width:8rem;">
+                                  
+                                    {{agenda.cod_documento }}
+                                </td>
+                                <td style="width:14%; min-width:10rem;">
+                                    
+                                    {{agenda.num_documento}}
+                                </td>
+                                <td style="width:14%; min-width: 10rem;">
+                                   <!--  <p-rating [ngModel]="product.rating" [readonly]="true" [cancel]="false"></p-rating> -->
+                                   {{agenda.nombre_cliente}}
+                                </td>
+                                <td style="width:14%; min-width: 10rem;">
+                                    {{agenda.descripcion_agenda}}
+                                 
+                                </td>
+                                <td>
+                                  {{agenda.id_estado}}
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+
+
+                    
+                </p-tabPanel>
+           
+            </p-tabView>
+        </div>
+
+
+
+    </div>
+ 
+    <p-dialog [(visible)]="abrirModalPreagenda" [style]="{width: '450px'}" header="Pre Agenda" [modal]="true" class="p-fluid">
+        <form [formGroup]="formularioFG" novalidate (ngSubmit)="GuardarPreAgenda($event)"  >
+      
+            <div class="field">
+                        <span class="p-input-icon-right" (click)="buscarClienteDni()" >
+                            <input type="text"  formControlName="f_Dni" pInputText placeholder="Ingrese dni"   />
+                            <i class="pi pi-search"   ></i>
+                        </span>
+            </div> 
+             <div *ngIf="!visibleformularioRegistrocliente" >
+               
+                <div class="field">
+                    <label htmlFor="lastname1" class="p-sr-only">Tipo documento</label>
+                    <p-dropdown [options]="documentoCliente" optionLabel="name"   formControlName="f_Documento"></p-dropdown>
+
+                </div>
+
+                <div class="field">
+        
+                    <input type="text" pInputText placeholder="Ingrese Nombre"     formControlName="f_Nombre"/>
+                
+               </div> 
+               <div class="field">
+        
+                <input type="text" pInputText placeholder="Ingrese Apellidos"     formControlName="f_Apellidos"/>
+            
+           </div> 
+
+
+             </div>
+       
+            <div class="field">
+        
+                    <input type="text" pInputText placeholder="Ingrese Direccion"     formControlName="f_Direccion"/>
+                
+            </div> 
+            <div class="field">
+        
+                <input type="text" pInputText placeholder="Ingrese Refencia"   formControlName="f_Refefencia"/>
+             
+        
+           </div> 
+           <div class="field">
+        
+            <input type="text" pInputText placeholder="Ingrese Telefono"  formControlName="f_Telefono"/>
+         
+    
+          </div> 
+
+
+
+            <div class="field">
+            
+                <textarea id="description" pInputTextarea  required rows="5"  cols="52" formControlName="f_Description"></textarea>
+            </div> 
+            
+            <div class="field">
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"  type="reset"></button>
+          <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text"    type="submit"></button> 
+             
+            </div>
+
+
+
+        </form>
+
+    </p-dialog>
+
+    
+</div>
