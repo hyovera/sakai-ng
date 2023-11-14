@@ -15,11 +15,11 @@ import { FormsModule ,ReactiveFormsModule} from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { DatePipe } from '@angular/common';
-
+import { MultiSelectModule } from "primeng/multiselect";
 @NgModule({
     imports: [
         CommonModule,
-        Agenda1RoutingModule,
+        Agenda1RoutingModule,MultiSelectModule,
         TabViewModule,DropdownModule,ToastModule,ReactiveFormsModule,ProgressSpinnerModule,
         ToolbarModule,ButtonModule,TableModule,DialogModule,InputTextModule,CalendarModule,AutoCompleteModule,
         FormsModule

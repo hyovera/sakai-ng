@@ -54,8 +54,13 @@ export class AgendaService {
     return this.http.post<any[]>(`${environment.endPoint1}api/v1/agenda/asignar`, body);
   }
 
+//http://167.86.114.134:8095/api/v1/tecnico/lista_tecnico_agenda
 
-  
+public ListaTecnicoAgenda(body: any): Observable<any[]> {
+  return this.http.post<any[]>(`${environment.endPoint1}api/v1/tecnico/lista_tecnico_agenda`, body);
+}
+
+  //api/v1/tecnico/lista_tecnico_agenda
  /*  public getSucList():Observable<any[]>{
   
     return this.http.get<any>(this.APIUrl+'activossucursal');

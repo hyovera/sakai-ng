@@ -4,7 +4,6 @@
     <p-toast></p-toast> 
         <div class="card">
            
-            <!-- <h4>Empty Page</h4> -->
             <p-tabView [activeIndex]="tabactivo">
                 <p-tabPanel header="Pre Agenda">
                     <p-toolbar styleClass="mb-4">
@@ -14,9 +13,7 @@
                             </div>
                         </ng-template>
                     </p-toolbar>
-
-               
-                        <p-progressSpinner *ngIf="showSpinner"></p-progressSpinner>
+                    <p-progressSpinner *ngIf="showSpinner"></p-progressSpinner>
                 
                     <p-table #dt [value]="preagenda" [columns]="cols" responsiveLayout="scroll" 
                     [rows]="10" 
@@ -66,7 +63,6 @@
                                     {{preagenda.num_documento}}
                                 </td>
                                 <td style="width:14%; min-width: 10rem;">
-                                   <!--  <p-rating [ngModel]="product.rating" [readonly]="true" [cancel]="false"></p-rating> -->
                                    {{preagenda.descripcion_agenda}}
                                 </td>
                                 <td style="width:14%; min-width: 10rem;">
@@ -87,11 +83,9 @@
                             <h5>Seleccionado pre agenda</h5>
                             <div class="row">
                                 <div class="col">
-
                                   <ul>
                                     <li *ngFor="let coupon of selectedPreAgenda">{{ coupon.num_documento }}</li>
                                   </ul>
-                                    
                                 </div>
                             </div>
             
@@ -104,8 +98,6 @@
                                 </div>
                                 <div class="field">
                                     <label htmlFor="lastname1" class="p-sr-only">Tecnico</label>
-                                   <!--  <p-dropdown [options]="selectedTecnicos" optionLabel="name" [(ngModel)]="selectedState"  [ngModelOptions]="{standalone: true}"></p-dropdown> -->
-                               
                                      <p-autoComplete [(ngModel)]="selectedTecnicosAsignado" [suggestions]="filteredtecnico" (completeMethod)="searchTecnicos($event)"  field="nombre" [dropdown]="true" [ngModelOptions]="{standalone: true}">
                                     </p-autoComplete>
                                 </div>
@@ -121,29 +113,41 @@
                 </p-tabPanel>
                 <p-tabPanel header="Estado Agenda">
 
-                    <div class="grid formgrid">
-                        <div class="col-12 mb-2 lg:col-4 lg:mb-0">
-                            <p-autoComplete [(ngModel)]="selectedTecnicos" [suggestions]="filteredtecnico" (completeMethod)="searchTecnicos($event)"  field="nombre" [dropdown]="true">
-                            </p-autoComplete>
-                        </div>
-                        <div class="col-12 mb-2 lg:col-4 lg:mb-0">
-                            <p-dropdown [options]="dropdownItems" optionLabel="name" [(ngModel)]="selectedState"></p-dropdown>
-                        </div>
-                        <div class="col-12 mb-2 lg:col-4 lg:mb-0">
-                            <p-button label="Buscar" icon="pi pi-search" [loading]="loading[0]" (onClick)="load(0)"></p-button>
-                        </div>
-                    </div>
+                    <p-toolbar styleClass="mb-11">
+                        <ng-template pTemplate="left" >
+                    
+                            <div class="grid formgrid">
+                                <div class="col-12 mb-2 lg:col-4 lg:mb-0">
+                                    <p-multiSelect inputId="multiselect" [options]="tecnicos" [(ngModel)]="value10" optionLabel="cod_tecnico" [filter]="false" ></p-multiSelect>
+
+                                </div>
+                                <div class="col-12 mb-2 lg:col-4 lg:mb-0">
+                                    <p-multiSelect inputId="multiselect" [options]="dropdownItems" [(ngModel)]="value11" optionLabel="name" [filter]="false" ></p-multiSelect>
+                                </div>
+                                <div class="col-12 mb-2 lg:col-4 lg:mb-0">
+                                    <input type="text" pInputText placeholder="nombre" />
+                                </div>
+                            </div>
+                           
+                        </ng-template>
+                    
+                        <ng-template pTemplate="right">
+                           
+                            <p-button label="Buscar" icon="pi pi-search"  (onClick)="buscarTecnicoAgenda()"></p-button>
+                        </ng-template>
+                    </p-toolbar>
+                  
+
+                
                     <br>
-
-
+                    <p-progressSpinner *ngIf="showSpinner"></p-progressSpinner>
                     <p-table #dt [value]="agenda" [columns]="cols1" responsiveLayout="scroll" 
                     [rows]="10" 
                     [paginator]="true"
-                     [rowsPerPageOptions]="[10,20,30]" 
-                     [showCurrentPageReport]="true" 
+                    [rowsPerPageOptions]="[10,20,30]" 
+                    [showCurrentPageReport]="true" 
                      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
-                    
-                         [rowHover]="true" dataKey="id_agenda">
+                    [rowHover]="true" dataKey="id_agenda">
                         
                         <ng-template pTemplate="header">
                             <tr>
@@ -189,7 +193,6 @@
                                 </td>
                                 <td style="width:14%; min-width: 10rem;">
                                     {{agenda.descripcion_agenda}}
-                                 
                                 </td>
                                 <td>
                                   {{agenda.id_estado}}

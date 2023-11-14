@@ -46,21 +46,21 @@ export class Agenda1Component implements OnInit {
 
   // Establece la fecha mínima como la fecha actual
    //  minimaFechaActual: Date = this.fechaActual;
-
+   
+   value10: any;
+   value11: any;
     //loading = [false, false, false, false];
     constructor(private AgendaService: AgendaService,private messageService: MessageService,  private _fb: FormBuilder,private datePipe: DatePipe) {
- 
        this.tabactivo=0;
        this.fechaFormateada = this.formatearFecha(new Date().toISOString());
-       this.fechaActual = new Date();
-       
+       this.fechaActual = new Date(); 
       }
 
       dropdownItems = [
-        { name: 'Todo', code: '0' },
-        { name: 'Pendiente', code: '1' },
-        { name: 'Terminado', code: '2' }
-    ];
+     
+        { name: 'AGENDADO', code: 2},
+        { name: 'TERMINADO', code: 3 }
+       ];
 
     documentoCliente = [
       { name: 'D.N.I', code: '1' },
@@ -72,23 +72,20 @@ export class Agenda1Component implements OnInit {
      //   this.showSpinner = true;
       this.getPreAgenda();
       this.gettecnicos();
-      this.getAgenda();
+     // this.getAgenda();
      // this.showSpinner = false;
       }
 
       formatearFecha(fecha: string): string {
-        // Formato deseado: 'dd/MM/yyyy' (puedes ajustarlo según tus necesidades)
         return this.datePipe.transform(fecha, 'yyyy-MM-dd');
       }
 
       public getPreAgenda(){
         this.AgendaService.getListarPreAgenda().subscribe(data => {
-           console.log(">>>>",data);
+        
            this.preagenda = data; 
-         //  this.preagenda.shift();
         }); 
 
-//f_Apellidos
         this.formularioFG = this._fb.group({
            f_Dni: ['', Validators.required],
            f_Documento: ['', ],
@@ -125,12 +122,12 @@ export class Agenda1Component implements OnInit {
 
     public getAgenda(){
       this.startSpinner()
-        this.AgendaService.getListarAgenda().subscribe(data => {
+       /*  this.AgendaService.getListarAgenda().subscribe(data => {
             console.log(">>>>",data);
             this.agenda = data; 
             this.stopSpinner();
           //  this.preagenda.shift();
-         }); 
+         });  */
 
     }
 
@@ -200,10 +197,8 @@ export class Agenda1Component implements OnInit {
         console.log(this.DniField?.value)
         this.loading=true
        if( this.DniField?.value==""){
-        this.messageService.add({ severity: 'info', summary: 'mensaje', detail: 'Ingrese dni' });
+        this.messageService.add({ severity: 'error', summary: 'mensaje', detail: 'Ingrese dni' });
        }else{
-    //    console.log(this.dni);
-    //  this.dni.value
          const parametros={
           "num_documento": this.DniField?.value,
           "nombre_cliente": ""
@@ -211,11 +206,9 @@ export class Agenda1Component implements OnInit {
         this.AgendaService.getListarCliente(parametros).subscribe(data => {
           //console.log(">>>>",data);  
            if(data.length>0){
-            this.DireccionField.setValue('Calle 344');
-            this.RefenciaField.setValue('Calle 344 por el  puente');
-            this.TelefonoField.setValue('23232323');
-            //
-            //idclienteField
+            this.DireccionField.setValue(data[0].direccion);
+            this.RefenciaField.setValue(data[0].referencia);
+            this.TelefonoField.setValue(data[0].telefono);
             this.idclienteField.setValue(data[0].id_cliente);
             this.visibleformularioRegistrocliente=true;
 
@@ -244,7 +237,7 @@ export class Agenda1Component implements OnInit {
       GuardarPreAgenda(event: Event) {
         event.preventDefault();
         this.bloqueobotonenvio=true
-      //  console.log(this.DescripcionField.value);
+        console.log(this.idclienteField.value);
       //  console.log(this.idclienteField.value)  
         //    si  es 0  va  crear  co n to
 
@@ -323,13 +316,48 @@ export class Agenda1Component implements OnInit {
 
 
          })
-
-
        }
        } 
 
        seleccionarFecha(event: any) {
         this.fechaSeleccionadaAsignacion = event;
+      }
+
+      buscarTecnicoAgenda(){
+       // alert("holaa");
+       this.showSpinner = true;
+        const tecnicos = this.value10.map((agenda: any ) => agenda.id_tecnico);
+        const codigotecnicos = tecnicos.join(',');
+
+        const estadoAgenda = this.value11.map((iten: any ) => iten.code);
+        const codigoagendastring = estadoAgenda.join(',');
+
+        const parametros={
+          "lista_id_tecnico": codigotecnicos,
+          "lista_id_estado": codigoagendastring,
+          "descripcion_cliente": ""
+         }
+
+        this.AgendaService.ListaTecnicoAgenda(parametros).subscribe((data: any) => {
+           if(data){
+            this.agenda = data;
+
+            console.log(data)
+            this.showSpinner = false;
+
+           }else{
+            this.showSpinner = false;
+            alert("vacio");
+           }
+         
+
+        })
+
+
+        console.log('codigo tecnicos',  codigotecnicos)
+        console.log('codigo agenda',  codigoagendastring)
+        //ListaTecnicoAgenda
+
       }
 
       get DniField() {
